@@ -5,34 +5,54 @@ using UnityEngine;
 
 public class FirstScript : MonoBehaviour
 {
-    int hp = 100;
+    // 아이템을 관리할 Dictionary
+    private Dictionary<string, int> items = new Dictionary<string, int>();
     void Start()
     {
-        
+        // 아이템 추가
+        AddItem("포션", 1);
+        AddItem("포션", 5);
+        AddItem("엘릭서", 2);
+        // 아이템 사용
+        UseItem("포션");
+        // 아이템 목록 출력
+        PrintInventory();
     }
-
-    void Update()
+    void AddItem(string itemName, int quantity)
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (items.ContainsKey(itemName))
         {
-            hp -= 20;
-            if (hp <= 0)
+            items[itemName] += quantity;
+        }
+        //arr_ghtjfk[1] = 1;
+        //arr_ghtjfk[1] += 5;
+        else
+        {
+            items.Add(itemName, quantity);
+        }
+        Debug.Log("추가 " + quantity + " " + itemName + "(을) 인벤토리로.");
+    }
+    void UseItem(string itemName)
+    {
+        if (items.ContainsKey(itemName))
+        {
+            items[itemName]--;
+            if (items[itemName] <= 0)
             {
-                print("게임오버");
+                items.Remove(itemName);
             }
-            else
-            {
-                Debug.Log("현재 체력은: " + hp + " 입니다.");
-            }
+            Debug.Log("사용한 아이템 : " + itemName + ".");
+        }
+        else
+        {
+            Debug.Log("아이템 " + itemName + " 을 인벤토리에서 찾을 수 없음.");
+        }
+    }
+    void PrintInventory()
+    {
+        foreach (KeyValuePair<string, int> item in items)
+        {
+            Debug.Log("아이템 : " + item.Key + ", 수량 : " + item.Value);
         }
     }
 }
-//마우스 버튼: Input.GetMouseButton(0 or 1);         누르고 있을 때 동안.        0은 좌클릭, 1이 우클릭
-//              Input.GetMouseButtonDown(0 or 1);         눌렀을 때.
-//              Input.GetMouseButtonUp(0 or 1);           뗐을 때.
-
-//키보드 감지:   Input.GetKey(**);                   누르고 있을 때 동안.
-//              Input.GetKeyDown(**);               눌렀을 때
-//             Input.GetKeyUp(**);                  뗐을 때.
-
-
